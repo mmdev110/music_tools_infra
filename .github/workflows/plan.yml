@@ -30,6 +30,8 @@ jobs:
         run: |
           aws --version
           terraform --version
+      - name: terraform init
+        run: terraform init
       - name: terraform fmt
         run: terraform fmt
       - name: terraform validate
