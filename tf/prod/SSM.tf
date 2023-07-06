@@ -68,7 +68,7 @@ resource "aws_ssm_parameter" "mysql_password" {
     ignore_changes = [value]
   }
 }
-resource "aws_ssm_parameter" "mysql_port" {#これは更新しなくていい
+resource "aws_ssm_parameter" "mysql_port" { #これは更新しなくていい
   name        = "/backend/mysql_port"
   value       = "3306"
   type        = "SecureString"
