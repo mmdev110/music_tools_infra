@@ -1,29 +1,39 @@
-# This is a basic workflow to help you get started with Actions
-
 name: terraform apply
-
-# Controls when the workflow will run
+# main branch only !!
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  #push:
-  #  branches: [ "main" ]
-  #pull_request:
-  #  branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  plan:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    defaults:
+      run:
+        working-directory: ./tf/prod
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{secrets.AWS_ROLE_ARN}}
+          aws-region: ap-northeast-1
+      - name: Configure Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.6
+      - name: version check
+        run: |
+          aws --version
+          terraform --version
+      - name: branch check
+        if: github.ref!='refs/heads/main'
+        run: |
+          echo "terraform apply runs on main branch only !"
+          exit 1
+      - name: terraform init
+        run: terraform init
       - name: terraform apply
-        run: echo terraform apply !
+        run: terraform apply -auto-approve
