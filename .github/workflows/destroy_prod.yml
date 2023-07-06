@@ -1,8 +1,6 @@
-name: terraform plan
-
+name: terraform destroy(prod)
+# main branch only !!
 on:
-  pull_request:
-    branches: ["main"]
   workflow_dispatch:
 permissions:
   id-token: write
@@ -30,15 +28,12 @@ jobs:
         run: |
           aws --version
           terraform --version
+      - name: branch check
+        if: github.ref!='refs/heads/main'
+        run: |
+          echo "terraform apply runs on main branch only !"
+          exit 1
       - name: terraform init
         run: terraform init
-      - name: terraform fmt
-        run: terraform fmt
-      - name: terraform validate
-        run: terraform validate -no-color
-      - name: terraform plan
-        id: plan
-        run: terraform plan -no-color
-      - name: terraform plan status
-        if: steps.plan.outcome == 'failure'
-        run: exit 1
+      - name: terraform destroy
+        run: terraform destroy -auto-approve
