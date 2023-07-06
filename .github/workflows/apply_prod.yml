@@ -1,4 +1,4 @@
-name: terraform apply
+name: terraform apply(prod)
 # main branch only !!
 on:
   workflow_dispatch:

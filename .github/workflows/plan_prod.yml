@@ -1,4 +1,4 @@
-name: terraform plan
+name: terraform plan(prod)
 
 on:
   pull_request:
