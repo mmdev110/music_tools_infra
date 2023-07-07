@@ -35,43 +35,43 @@ resource "aws_lb_listener" "http" {
     }
   }
 }
-resource "aws_lb_listener" "https" {
-  load_balancer_arn = aws_lb.example.arn
-  port              = "443"
-  protocol          = "HTTPS"
-  //作成した証明書をアタッチ
-  certificate_arn = aws_acm_certificate.example.arn
-  //https://docs.aws.amazon.com/ja_jp/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies
-  ssl_policy = "ELBSecurityPolicy-2016-08"
-
-  //リスナールールにマッチしない場合の挙動
-  default_action {
-    //固定レスポンス
-    type = "fixed-response"
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "これはHTTPSです"
-      status_code  = 200
-    }
-  }
-}
+//resource "aws_lb_listener" "https" {
+//  load_balancer_arn = aws_lb.example.arn
+//  port              = "443"
+//  protocol          = "HTTPS"
+//  //作成した証明書をアタッチ
+//  certificate_arn = aws_acm_certificate.example.arn
+//  //https://docs.aws.amazon.com/ja_jp/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies
+//  ssl_policy = "ELBSecurityPolicy-2016-08"
+//
+//  //リスナールールにマッチしない場合の挙動
+//  default_action {
+//    //固定レスポンス
+//    type = "fixed-response"
+//    fixed_response {
+//      content_type = "text/plain"
+//      message_body = "これはHTTPSです"
+//      status_code  = 200
+//    }
+//  }
+//}
 //リスナールール
 //listenerとtarget_groupの紐付け
-resource "aws_lb_listener_rule" "https" {
-  listener_arn = aws_lb_listener.https.arn
-  priority     = 100
-  action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.example.arn
-  }
-  //マッチ条件
-  //全てのリクエストを指定したターゲットグループに流す
-  condition {
-    path_pattern {
-      values = ["/*"]
-    }
-  }
-}
+//resource "aws_lb_listener_rule" "https" {
+//  listener_arn = aws_lb_listener.https.arn
+//  priority     = 100
+//  action {
+//    type             = "forward"
+//    target_group_arn = aws_lb_target_group.example.arn
+//  }
+//  //マッチ条件
+//  //全てのリクエストを指定したターゲットグループに流す
+//  condition {
+//    path_pattern {
+//      values = ["/*"]
+//    }
+//  }
+//}
 //listenerとtarget_groupの紐付け
 resource "aws_lb_listener_rule" "http" {
   listener_arn = aws_lb_listener.http.arn
