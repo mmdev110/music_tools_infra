@@ -76,13 +76,17 @@ resource "aws_lb_listener" "http" {
 resource "aws_lb_listener_rule" "http" {
   listener_arn = aws_lb_listener.http.arn
   priority     = 100
+  //action {
+  //  type = "fixed-response"
+  //  fixed_response {
+  //    content_type = "text/plain"
+  //    message_body = "これはHTTPです"
+  //    status_code  = 200
+  //  }
+  //}
   action {
-    type = "fixed-response"
-    fixed_response {
-      content_type = "text/plain"
-      message_body = "これはHTTPです"
-      status_code  = 200
-    }
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.example.arn
   }
   //マッチ条件
   //全てのリクエストを指定したターゲットグループに流す
@@ -100,7 +104,7 @@ resource "aws_lb_target_group" "example" {
   target_type = "ip"
   vpc_id      = aws_vpc.service.id
   //内部の通信はhttpで良い
-  port     = 80
+  port     = 5000
   protocol = "HTTP"
   //登録解除前の待機時間
   deregistration_delay = 300
