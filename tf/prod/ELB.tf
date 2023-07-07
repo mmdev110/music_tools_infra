@@ -77,8 +77,12 @@ resource "aws_lb_listener_rule" "http" {
   listener_arn = aws_lb_listener.http.arn
   priority     = 100
   action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.example.arn
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "これはHTTPです"
+      status_code  = 200
+    }
   }
   //マッチ条件
   //全てのリクエストを指定したターゲットグループに流す
