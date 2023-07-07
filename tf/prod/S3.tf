@@ -1,6 +1,9 @@
 variable "bucket_name_usermedia" {
   default = "music-tools-media-prod"
 }
+variable "bucket_name_alb_log" {
+  default = "music-tools-access-log-prod"
+}
 resource "aws_s3_bucket" "private" {
   bucket        = var.bucket_name_usermedia
   force_destroy = true
@@ -33,3 +36,29 @@ resource "aws_s3_bucket_public_access_block" "private" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+//ALBアクセスログ
+resource "aws_s3_bucket" "alb_log" {
+  bucket        = var.bucket_name_alb_log
+  force_destroy = true
+}
+resource "aws_s3_bucket_policy" "alb_log" {
+  bucket = var.bucket_name_alb_log
+  policy = data.aws_iam_policy_document.alb_log.json
+  depends_on = [
+    aws_s3_bucket.alb_log
+  ]
+}
+data "aws_iam_policy_document" "alb_log" {
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:PutObject"]
+    resources = ["arn:aws:s3:::${var.bucket_name_alb_log}/*"]
+    principals {
+      type = "AWS"
+      //ELBアカウントID(ap-northeast-1)
+      identifiers = ["582318560864"]
+    }
+  }
+}
+
