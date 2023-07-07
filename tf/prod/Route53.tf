@@ -1,4 +1,4 @@
-data "aws_route53_zone" "example" {
+resource "aws_route53_zone" "example" {
   name = "ys-dev.net"
 }
 resource "aws_route53_zone" "subdomain" {
@@ -6,8 +6,8 @@ resource "aws_route53_zone" "subdomain" {
 }
 //DNSレコード
 resource "aws_route53_record" "example" {
-  zone_id = data.aws_route53_zone.example.id
-  name    = data.aws_route53_zone.example.name
+  zone_id = aws_route53_zone.example.id
+  name    = aws_route53_zone.example.name
   //ALIASレコード, ipアドレスまたはAWSリソースにルーティング
   type = "A"
 
@@ -21,7 +21,7 @@ resource "aws_route53_record" "example" {
 //検証用のDNSレコード
 //サブドメイン追加してたら、その分も作る
 resource "aws_route53_record" "example_certificate" {
-  zone_id = data.aws_route53_zone.example.id
+  zone_id = aws_route53_zone.example.id
   name    = tolist(aws_acm_certificate.example.domain_validation_options)[0].resource_record_name
   type    = tolist(aws_acm_certificate.example.domain_validation_options)[0].resource_record_type
   records = [tolist(aws_acm_certificate.example.domain_validation_options)[0].resource_record_value]
