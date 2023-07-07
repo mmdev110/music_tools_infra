@@ -1,4 +1,4 @@
-data "aws_route53_zone" "example" {
+resource "aws_route53_zone" "example" {
   name = "ys-dev.net"
 }
 resource "aws_route53_zone" "subdomain" {
