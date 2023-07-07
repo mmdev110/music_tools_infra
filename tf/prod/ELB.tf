@@ -96,7 +96,7 @@ resource "aws_lb_target_group" "example" {
   target_type = "ip"
   vpc_id      = aws_vpc.service.id
   //内部の通信はhttpで良い
-  port     = 80
+  port     = 5000
   protocol = "HTTP"
   //登録解除前の待機時間
   deregistration_delay = 300
