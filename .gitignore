@@ -37,3 +37,4 @@ terraform.rc
 # ignore env
 env/infra.prod.env
 env/infra.stg.env
+secrets.txt
