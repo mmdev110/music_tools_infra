@@ -59,6 +59,14 @@ resource "aws_ecs_task_definition" "backend" {
           "containerPort" : 80
         },
       ],
+      "logConfiguration" : {
+        "logDriver" : "awslogs",
+        "options" : {
+          "awslogs-region" : "ap-northeast-1",
+          "awslogs-stream-prefix" : "nginx",
+          "awslogs-group" : "/ecs/backend"
+        }
+      },
       "environment" : [
         {
           "name" : "MYSQL_DATABASE",
