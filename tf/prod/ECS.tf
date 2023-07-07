@@ -39,21 +39,25 @@ resource "aws_ecs_service" "backend" {
 
 resource "aws_ecs_task_definition" "backend" {
   family                   = "service"
-  cpu                      = "256"
-  memory                   = "512"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = module.ecs_task_execution_role.iam_role_arn
   container_definitions = jsonencode([
     {
       "name" : "backend",
+      "cpu" : 256,
+      "memory" : 512,
       "image" : "${aws_ecr_repository.repository.repository_url}:latest",
       "essential" : true,
       "portMappings" : [
         {
           "protocol" : "tcp",
           "containerPort" : 5000
-        }
+        },
+        {
+          "protocol" : "tcp",
+          "containerPort" : 80
+        },
       ],
       "environment" : [
         {
