@@ -38,7 +38,7 @@ resource "aws_ecs_service" "backend" {
 }
 
 resource "aws_ecs_task_definition" "backend" {
-  family                   = "service"
+  family                   = "backend"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = module.ecs_task_execution_role.iam_role_arn
@@ -53,10 +53,7 @@ resource "aws_ecs_task_definition" "backend" {
         {
           "protocol" : "tcp",
           "containerPort" : 5000
-        },
-        {
-          "protocol" : "tcp",
-          "containerPort" : 80
+          "hostPort" : 80
         },
       ],
       "logConfiguration" : {
@@ -72,7 +69,8 @@ resource "aws_ecs_task_definition" "backend" {
           "name" : "MYSQL_DATABASE",
           "valueFrom" : "/backend/mysql_database",
         },
-      ]
+      ],
+      "command" : ["/output"]
     }
   ])
 } //ECSに付与するIAMロール
