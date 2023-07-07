@@ -13,7 +13,7 @@ resource "aws_ecs_service" "backend" {
   launch_type      = "FARGATE"
   platform_version = "1.3.0"
   //起動からヘルスチェック開始までの待ち時間
-  health_check_grace_period_seconds = 60
+  //health_check_grace_period_seconds = 60
 
   //どこにタスクを配置するか？
   network_configuration {
