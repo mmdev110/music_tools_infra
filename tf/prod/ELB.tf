@@ -57,8 +57,24 @@ resource "aws_lb_listener" "https" {
 }
 //リスナールール
 //listenerとtarget_groupの紐付け
-resource "aws_lb_listener_rule" "example" {
+resource "aws_lb_listener_rule" "https" {
   listener_arn = aws_lb_listener.https.arn
+  priority     = 100
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.example.arn
+  }
+  //マッチ条件
+  //全てのリクエストを指定したターゲットグループに流す
+  condition {
+    path_pattern {
+      values = ["/*"]
+    }
+  }
+}
+//listenerとtarget_groupの紐付け
+resource "aws_lb_listener_rule" "http" {
+  listener_arn = aws_lb_listener.http.arn
   priority     = 100
   action {
     type             = "forward"
