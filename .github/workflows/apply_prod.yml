@@ -50,5 +50,5 @@ jobs:
         working-directory: ./tf/prod/${{ inputs.infraType }}
         run: terraform init
       - name: terraform apply
-        working-directory: ./tf/prod${{ inputs.infraType }}
+        working-directory: ./tf/prod/${{ inputs.infraType }}
         run: terraform apply -auto-approve
