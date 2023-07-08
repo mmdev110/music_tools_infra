@@ -47,7 +47,7 @@ jobs:
           echo "choose infra type!"
           exit 1
       - name: terraform init
-        working-directory: ./tf/prod${{ inputs.infraType }}
+        working-directory: ./tf/prod/${{ inputs.infraType }}
         run: terraform init
       - name: terraform apply
         working-directory: ./tf/prod${{ inputs.infraType }}
