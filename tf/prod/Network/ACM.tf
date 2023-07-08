@@ -2,7 +2,7 @@
 
 resource "aws_acm_certificate" "example" {
   provider    = aws.us
-  domain_name = aws_route53_record.example.name
+  domain_name = aws_route53_zone.example.name
   //ドメイン名を追加したい場合以下に指定(mydomain.comに加えてtest.mydomain.comも追加したいなど)
   subject_alternative_names = []
   //検証方法
