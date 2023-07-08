@@ -42,7 +42,7 @@ jobs:
           echo "terraform apply runs on main branch only !"
           exit 1
       - name: input check
-        if: ${{inputs.infraType}}=='Choose One'
+        if: inputs.infraType=='Choose One'
         run: |
           echo "choose infra type!"
           exit 1
