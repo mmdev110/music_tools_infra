@@ -1,6 +1,7 @@
 //https化のためのSSL証明書作成
 
 resource "aws_acm_certificate" "example" {
+  provider=aws.us
   domain_name = aws_route53_record.example.name
   //ドメイン名を追加したい場合以下に指定(mydomain.comに加えてtest.mydomain.comも追加したいなど)
   subject_alternative_names = []
@@ -15,6 +16,7 @@ resource "aws_acm_certificate" "example" {
 
 //検証完了まで待機するためのリソース
 resource "aws_acm_certificate_validation" "example" {
+  provider=aws.us
   certificate_arn         = aws_acm_certificate.example.arn
   validation_record_fqdns = [aws_route53_record.example_certificate.fqdn]
 }
