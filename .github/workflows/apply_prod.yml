@@ -2,6 +2,17 @@ name: terraform apply(prod)
 # main branch only !!
 on:
   workflow_dispatch:
+    inputs:
+      infraType:
+        description: "infrastructure type"
+        required: true
+        default: "Choose One"
+        type: choice
+        options:
+        - Choose One
+        - Backend
+        - Frontend
+        - Network
 permissions:
   id-token: write
   contents: read
@@ -10,9 +21,6 @@ permissions:
 jobs:
   apply:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./tf/prod
     steps:
       - uses: actions/checkout@v3
       - name: Configure AWS credentials
@@ -33,7 +41,14 @@ jobs:
         run: |
           echo "terraform apply runs on main branch only !"
           exit 1
+      - name: input check
+        if: ${{inputs.infraType}}=='Choose One'
+        run: |
+          echo "choose infra type!"
+          exit 1
       - name: terraform init
+        working-directory: ./tf/prod${{ inputs.infraType }}
         run: terraform init
       - name: terraform apply
+        working-directory: ./tf/prod${{ inputs.infraType }}
         run: terraform apply -auto-approve

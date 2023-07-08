@@ -1,9 +1,9 @@
-data "aws_route53_zone" "example" {
+resource "aws_route53_zone" "example" {
   name = "ys-dev.net"
 }
-resource "aws_route53_zone" "subdomain" {
-  name = "test.loopanalyzer.tk"
-}
+//resource "aws_route53_zone" "subdomain" {
+//  name = "test.loopanalyzer.tk"
+//}
 //DNSレコード
 resource "aws_route53_record" "example" {
   zone_id = data.aws_route53_zone.example.id
