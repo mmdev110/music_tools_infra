@@ -13,6 +13,15 @@ on:
         - Backend
         - Frontend
         - Network
+      action:
+        description: "apply or destroy"
+        required: true
+        default: "Choose One"
+        type: choice
+        options:
+        - Choose One
+        - apply
+        - destroy
 permissions:
   id-token: write
   contents: read
@@ -42,13 +51,13 @@ jobs:
           echo "terraform apply runs on main branch only !"
           exit 1
       - name: input check
-        if: inputs.infraType=='Choose One'
+        if: inputs.infraType=='Choose One' || inputs.action=='Choose One'
         run: |
-          echo "choose infra type!"
+          echo "choose infra type or action!"
           exit 1
       - name: terraform init
         working-directory: ./tf/prod/${{ inputs.infraType }}
         run: terraform init
-      - name: terraform apply
+      - name: exec (terraform apply or destroy)
         working-directory: ./tf/prod/${{ inputs.infraType }}
-        run: terraform apply -auto-approve
+        run: terraform ${{inputs.action}} -auto-approve
