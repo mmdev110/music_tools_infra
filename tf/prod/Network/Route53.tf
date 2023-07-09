@@ -1,5 +1,8 @@
 resource "aws_route53_zone" "example" {
   name = "ys-dev.net"
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 //resource "aws_route53_zone" "subdomain" {
 //  name = "test.loopanalyzer.tk"
