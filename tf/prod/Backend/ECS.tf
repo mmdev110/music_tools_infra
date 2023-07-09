@@ -21,8 +21,7 @@ resource "aws_ecs_service" "backend" {
     security_groups  = [module.nginx_sg.security_group_id]
 
     subnets = [
-      aws_subnet.web0.id,
-      aws_subnet.web1.id
+      aws_subnet.web0.id
     ]
   }
   //ELBとの紐付け、ターゲットグループへの登録
@@ -75,7 +74,7 @@ resource "aws_ecs_task_definition" "backend" {
   ])
 } //ECSに付与するIAMロール
 module "ecs_task_execution_role" {
-  source     = "./iam_role"
+  source     = "../iam_role"
   name       = "ecs_task_execution"
   identifier = "ecs-tasks.amazonaws.com"
   policy     = data.aws_iam_policy_document.ecs_task_execution.json
@@ -96,7 +95,7 @@ data "aws_iam_policy_document" "ecs_task_execution" {
   }
 }
 module "nginx_sg" {
-  source      = "./security_group"
+  source      = "../security_group"
   name        = "nginx-sg"
   vpc_id      = aws_vpc.service.id
   port        = 80
