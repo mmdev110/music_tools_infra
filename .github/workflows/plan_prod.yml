@@ -10,7 +10,7 @@ permissions:
   pull-requests: write
 
 jobs:
-  plan:
+  plan_for_Network:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -30,6 +30,42 @@ jobs:
         run: |
           aws --version
           terraform --version
+      - name: plan for network
+        run: echo Network
+      - name: terraform init
+        run: terraform init
+      - name: terraform fmt
+        run: terraform fmt
+      - name: terraform validate
+        run: terraform validate
+      - name: terraform plan
+        id: plan
+        run: terraform plan
+      - name: terraform plan status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+  plan_for_Backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./tf/prod/Backend
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{secrets.AWS_ROLE_ARN}}
+          aws-region: ap-northeast-1
+      - name: Configure Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.6
+      - name: version check
+        run: |
+          aws --version
+          terraform --version
+      - name: plan for network
+        run: echo Network
       - name: terraform init
         run: terraform init
       - name: terraform fmt

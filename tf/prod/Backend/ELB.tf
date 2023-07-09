@@ -6,7 +6,7 @@ resource "aws_lb" "example" {
   idle_timeout               = 60
   enable_deletion_protection = false
 
-  subnets = [aws_subnet.public0.id, aws_subnet.public1.id]
+  subnets = [aws_subnet.public0.id]
   access_logs {
     bucket  = aws_s3_bucket.alb_log.id
     enabled = true
