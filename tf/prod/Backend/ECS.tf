@@ -21,15 +21,15 @@ resource "aws_ecs_service" "backend" {
     security_groups  = [module.nginx_sg.security_group_id]
 
     subnets = [
-      aws_subnet.web0.id
+      aws_subnet.public0.id
     ]
   }
   //ELBとの紐付け、ターゲットグループへの登録
-  load_balancer {
-    target_group_arn = aws_lb_target_group.example.arn
-    container_name   = "backend"
-    container_port   = 5000
-  }
+  //load_balancer {
+  //  target_group_arn = aws_lb_target_group.example.arn
+  //  container_name   = "backend"
+  //  container_port   = 5000
+  //}
 
   lifecycle {
     ignore_changes = [task_definition]
