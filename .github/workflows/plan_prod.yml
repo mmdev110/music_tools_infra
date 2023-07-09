@@ -30,14 +30,38 @@ jobs:
         run: |
           aws --version
           terraform --version
+      - name: plan for network
+        run: echo Network
       - name: terraform init
+        working-directory: ./tf/prod/Network
         run: terraform init
       - name: terraform fmt
+        working-directory: ./tf/prod/Network
         run: terraform fmt
       - name: terraform validate
+        working-directory: ./tf/prod/Network
         run: terraform validate
       - name: terraform plan
         id: plan
+        working-directory: ./tf/prod/Network
+        run: terraform plan
+      - name: terraform plan status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+      - name: plan for Backend
+        run: echo Backend
+      - name: terraform init
+        working-directory: ./tf/prod/Backend
+        run: terraform init
+      - name: terraform fmt
+        working-directory: ./tf/prod/Backend
+        run: terraform fmt
+      - name: terraform validate
+        working-directory: ./tf/prod/Backend
+        run: terraform validate
+      - name: terraform plan
+        id: plan
+        working-directory: ./tf/prod/Backend
         run: terraform plan
       - name: terraform plan status
         if: steps.plan.outcome == 'failure'
