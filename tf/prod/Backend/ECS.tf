@@ -52,7 +52,6 @@ resource "aws_ecs_task_definition" "backend" {
         {
           "protocol" : "tcp",
           "containerPort" : 5000
-          "hostPort" : 80
         },
       ],
       "logConfiguration" : {
