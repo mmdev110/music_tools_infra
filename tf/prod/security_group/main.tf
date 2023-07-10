@@ -5,10 +5,12 @@ variable "cidr_blocks" {
   type = list(string)
 }
 
+//セキュリティグループ
 resource "aws_security_group" "default" {
   name   = var.name
   vpc_id = var.vpc_id
 }
+//ルール(ingress)
 resource "aws_security_group_rule" "ingress" {
   type              = "ingress"
   from_port         = var.port
@@ -17,6 +19,7 @@ resource "aws_security_group_rule" "ingress" {
   cidr_blocks       = var.cidr_blocks
   security_group_id = aws_security_group.default.id
 }
+//ルール(egress)
 resource "aws_security_group_rule" "egress" {
   type              = "egress"
   from_port         = 0
