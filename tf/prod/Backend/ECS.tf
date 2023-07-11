@@ -9,31 +9,32 @@ resource "aws_ecs_service" "backend" {
   cluster         = aws_ecs_cluster.backend_cluster.arn
   task_definition = aws_ecs_task_definition.backend.arn
   //維持するタスク数
-  desired_count    = 2
+  desired_count    = 1
   launch_type      = "FARGATE"
-  platform_version = "1.3.0"
+  platform_version = "LATEST"
   //起動からヘルスチェック開始までの待ち時間
   health_check_grace_period_seconds = 60
 
   //どこにタスクを配置するか？
   network_configuration {
     assign_public_ip = false
-    security_groups  = [module.nginx_sg.security_group_id]
+    security_groups  = [module.nginx_sg.security_group_id, module.https_sg.security_group_id]
 
     subnets = [
-      aws_subnet.public0.id
+      aws_subnet.web0.id,
+      //aws_subnet.web1.id
     ]
   }
   //ELBとの紐付け、ターゲットグループへの登録
-  //load_balancer {
-  //  target_group_arn = aws_lb_target_group.example.arn
-  //  container_name   = "backend"
-  //  container_port   = 5000
-  //}
-
-  lifecycle {
-    ignore_changes = [task_definition]
+  load_balancer {
+    target_group_arn = aws_lb_target_group.backend.arn
+    container_name   = "backend"
+    container_port   = 5000
   }
+
+  //lifecycle {
+  //  ignore_changes = [task_definition]
+  //}
 }
 
 resource "aws_ecs_task_definition" "backend" {
