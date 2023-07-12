@@ -59,6 +59,15 @@ resource "aws_ssm_parameter" "mysql_user" {
     ignore_changes = [value]
   }
 }
+resource "aws_ssm_parameter" "mysql_host" {
+  name        = "/backend/mysql_host"
+  value       = "replace me"
+  type        = "SecureString"
+  description = "mysql host"
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
 resource "aws_ssm_parameter" "mysql_password" {
   name        = "/backend/mysql_password"
   value       = "replace me"

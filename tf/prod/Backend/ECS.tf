@@ -68,6 +68,14 @@ resource "aws_ecs_task_definition" "backend" {
           "name" : "MYSQL_DATABASE",
           "valueFrom" : "/backend/mysql_database",
         },
+                {
+          "name" : "MYSQL_HOST",
+          "valueFrom" : "/backend/mysql_host",
+        },
+                        {
+          "name" : "MYSQL_PASSWORD",
+          "valueFrom" : "/backend/mysql_host",
+        },
       ],
       "command" : ["/output"]
     }
