@@ -16,16 +16,25 @@ resource "aws_ssm_parameter" "db_user" {
   value       = "replace me"
   type        = "SecureString"
   description = "db user"
+  lifecycle {
+    ignore_changes = [value]
+  }
 }
 resource "aws_ssm_parameter" "db_password" {
   name        = "/db/db_password"
   value       = "replace me"
   type        = "SecureString"
   description = "db password"
+  lifecycle {
+    ignore_changes = [value]
+  }
 }
 resource "aws_ssm_parameter" "db_database" {
   name        = "/db/db_database"
   value       = "replace me"
   type        = "SecureString"
   description = "db database"
+  lifecycle {
+    ignore_changes = [value]
+  }
 }
