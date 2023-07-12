@@ -11,9 +11,9 @@ resource "aws_lb" "backend" {
   idle_timeout               = 60
   enable_deletion_protection = false
 
-  subnets = [aws_subnet.public0.id, aws_subnet.public1.id]
+  subnets = [data.aws_subnet.public0.id, data.aws_subnet.public1.id]
   access_logs {
-    bucket  = aws_s3_bucket.alb_log.id
+    bucket  = data.aws_s3_bucket.alb_log.id
     enabled = true
   }
   security_groups = [
@@ -83,7 +83,7 @@ resource "aws_lb_listener_rule" "https" {
 resource "aws_lb_target_group" "backend" {
   name        = "backend"
   target_type = "ip" //ECS Fargateに振り分ける場合はip
-  vpc_id      = aws_vpc.service.id
+  vpc_id      = data.aws_vpc.service.id
   //内部の通信はhttpで良い
   port     = 5000
   protocol = "HTTP"
@@ -107,7 +107,7 @@ module "http_sg" {
   //外部から80ポートへのingressを許可(http)
   source      = "../security_group"
   name        = "http-sg"
-  vpc_id      = aws_vpc.service.id
+  vpc_id      = data.aws_vpc.service.id
   port        = 80
   cidr_blocks = ["0.0.0.0/0"]
 }
@@ -115,7 +115,7 @@ module "https_sg" {
   //外部から443ポートへのingressを許可(https)
   source      = "../security_group"
   name        = "https-sg"
-  vpc_id      = aws_vpc.service.id
+  vpc_id      = data.aws_vpc.service.id
   port        = 443
   cidr_blocks = ["0.0.0.0/0"]
 }

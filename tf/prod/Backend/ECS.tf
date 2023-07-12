@@ -1,7 +1,9 @@
 locals {
   secrets_file_name = "app.prod.env"
 }
-
+data "aws_ecr_repository" "repository" {
+  name = "music_tools_backend"
+}
 
 resource "aws_ecs_cluster" "backend_cluster" {
   name = "music_tools_backend_cluster"
@@ -26,8 +28,8 @@ resource "aws_ecs_service" "backend" {
     security_groups  = [module.nginx_sg.security_group_id, module.https_sg.security_group_id]
 
     subnets = [
-      aws_subnet.web0.id,
-      //aws_subnet.web1.id
+      data.aws_subnet.web0.id,
+      //data.aws_subnet.web1.id
     ]
   }
   //ELBとの紐付け、ターゲットグループへの登録
@@ -71,7 +73,7 @@ resource "aws_ecs_task_definition" "backend" {
       "environmentFiles" : [
         {
           "type" : "s3",
-          "value" : "${aws_s3_bucket.secrets.arn}/${local.secrets_file_name}",
+          "value" : "${data.aws_s3_bucket.secrets.arn}/${local.secrets_file_name}",
         },
       ],
       "command" : ["/output"]
@@ -102,7 +104,7 @@ data "aws_iam_policy_document" "ecs_task_execution" {
 module "nginx_sg" {
   source      = "../security_group"
   name        = "nginx-sg"
-  vpc_id      = aws_vpc.service.id
+  vpc_id      = data.aws_vpc.service.id
   port        = 80
-  cidr_blocks = [aws_vpc.service.cidr_block]
+  cidr_blocks = [data.aws_vpc.service.cidr_block]
 }

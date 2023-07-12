@@ -36,7 +36,7 @@ resource "aws_db_option_group" "db" {
 }
 resource "aws_db_subnet_group" "db" {
   name       = "subnets"
-  subnet_ids = [aws_subnet.db0.id, aws_subnet.db1.id]
+  subnet_ids = [data.aws_subnet.db0.id, data.aws_subnet.db1.id]
 }
 
 resource "aws_rds_cluster" "db_cluster" {
@@ -93,9 +93,9 @@ resource "aws_rds_cluster_instance" "db" {
 module "mysql_sg" {
   source      = "../security_group"
   name        = "mysql-sg"
-  vpc_id      = aws_vpc.service.id
+  vpc_id      = data.aws_vpc.service.id
   port        = 3306
-  cidr_blocks = [aws_vpc.service.cidr_block]
+  cidr_blocks = [data.aws_vpc.service.cidr_block]
 }
 
 output "endpoint" {
