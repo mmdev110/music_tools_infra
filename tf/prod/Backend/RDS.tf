@@ -49,13 +49,13 @@ resource "aws_rds_cluster" "db_cluster" {
     max_capacity = 1.0
     min_capacity = 0.5
   }
-  master_username = "admin"
+  master_username = data.aws_ssm_parameter.db_user.value
   //パスワードは仮置きして後で更新する
   /*
   aws rds modify-db-instance --db-instance-identifier "example" --master-user-password "NewMasterPassword!"
   */
-  master_password = "VeryStrongPassword"
-  database_name   = "music_tools"
+  master_password = data.aws_ssm_parameter.db_password.value
+  database_name   = data.aws_ssm_parameter.db_database.value
   //multi_az            = false
   //backup_window              = "09:10-09:40"
   //backup_retention_period    = 30

@@ -1,6 +1,7 @@
-locals{
-  secrets_file_name="app.prod.env"
+locals {
+  secrets_file_name = "app.prod.env"
 }
+
 
 resource "aws_ecs_cluster" "backend_cluster" {
   name = "music_tools_backend_cluster"
@@ -51,7 +52,7 @@ resource "aws_ecs_task_definition" "backend" {
   container_definitions = jsonencode([
     {
       "name" : "backend",
-      "image" : "${aws_ecr_repository.repository.repository_url}:latest",
+      "image" : "${data.aws_ecr_repository.repository.repository_url}:latest",
       "essential" : true,
       "portMappings" : [
         {
@@ -70,7 +71,7 @@ resource "aws_ecs_task_definition" "backend" {
       "environmentFiles" : [
         {
           "type" : "s3",
-          "value" : aws_s3_bucket.secrets.arn+"/"+locals.secrets_file_name,
+          "value" : "${aws_s3_bucket.secrets.arn}/${local.secrets_file_name}",
         },
       ],
       "command" : ["/output"]
@@ -94,7 +95,7 @@ data "aws_iam_policy_document" "ecs_task_execution" {
 
   statement {
     effect    = "Allow"
-    actions   = ["ssm:GetParameters", "kms:Decrypt","s3:GetObject","s3:GetBucketLocation"]
+    actions   = ["ssm:GetParameters", "kms:Decrypt", "s3:GetObject", "s3:GetBucketLocation"]
     resources = ["*"]
   }
 }
