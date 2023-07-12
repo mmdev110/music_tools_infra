@@ -1,3 +1,7 @@
+locals{
+  secrets_file_name="app.prod.env"
+}
+
 resource "aws_ecs_cluster" "backend_cluster" {
   name = "music_tools_backend_cluster"
 }
@@ -63,18 +67,10 @@ resource "aws_ecs_task_definition" "backend" {
           "awslogs-group" : "/ecs/backend"
         }
       },
-      "environment" : [
+      "environmentFiles" : [
         {
-          "name" : "MYSQL_DATABASE",
-          "valueFrom" : "/backend/mysql_database",
-        },
-                {
-          "name" : "MYSQL_HOST",
-          "valueFrom" : "/backend/mysql_host",
-        },
-                        {
-          "name" : "MYSQL_PASSWORD",
-          "valueFrom" : "/backend/mysql_host",
+          "type" : "s3",
+          "value" : aws_s3_bucket.secrets.arn+"/"+locals.secrets_file_name,
         },
       ],
       "command" : ["/output"]
@@ -98,7 +94,7 @@ data "aws_iam_policy_document" "ecs_task_execution" {
 
   statement {
     effect    = "Allow"
-    actions   = ["ssm:GetParameters", "kms:Decrypt"]
+    actions   = ["ssm:GetParameters", "kms:Decrypt","s3:GetObject","s3:GetBucketLocation"]
     resources = ["*"]
   }
 }
