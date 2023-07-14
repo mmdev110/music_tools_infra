@@ -7,6 +7,6 @@ locals {
 data "aws_s3_bucket" "alb_log" {
   bucket = local.bucket_name_alb_log
 }
-data "aws_s3_bucket" "secrets" {
-  bucket = local.bucket_name_secrets
+data "aws_s3_bucket" "usermedia" {
+  bucket = local.bucket_name_usermedia
 }
