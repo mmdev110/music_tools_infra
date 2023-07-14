@@ -1,5 +1,5 @@
 resource "aws_route53_zone" "example" {
-  name = local.main_domain
+  name = module.constants.main_domain
   lifecycle {
     prevent_destroy = true
   }
@@ -38,8 +38,4 @@ resource "aws_route53_record" "cloudfront_certificate" {
   ttl             = 60
   type            = each.value.type
   zone_id         = aws_route53_zone.example.zone_id
-}
-
-output "domain_name" {
-  value = aws_route53_zone.example.name
 }

@@ -1,18 +1,12 @@
-locals {
-  bucket_name_usermedia = "music-tools-media-prod"
-  bucket_name_alb_log   = "music-tools-access-log-prod"
-  bucket_name_secrets   = "music-tools-secrets-prod"
-  bucket_name_frontend  = "music-tools-frontend-prod"
-}
 resource "aws_s3_bucket" "usermedia" {
-  bucket        = local.bucket_name_usermedia
+  bucket        = module.constants.bucket_name_usermedia
   force_destroy = true
   //versioning {
   //  enabled = true
   //}
 }
 resource "aws_s3_bucket_server_side_encryption_configuration" "usermedia" {
-  bucket = local.bucket_name_usermedia
+  bucket = module.constants.bucket_name_usermedia
   rule {
     apply_server_side_encryption_by_default {
       sse_algorithm = "AES256"
@@ -21,7 +15,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "usermedia" {
   }
 }
 resource "aws_s3_bucket_cors_configuration" "usermedia" {
-  bucket = local.bucket_name_usermedia
+  bucket = module.constants.bucket_name_usermedia
   cors_rule {
     allowed_origins = ["*"]
     allowed_methods = ["GET", "PUT"]
@@ -30,7 +24,7 @@ resource "aws_s3_bucket_cors_configuration" "usermedia" {
   }
 }
 resource "aws_s3_bucket_public_access_block" "usermedia" {
-  bucket                  = local.bucket_name_usermedia
+  bucket                  = module.constants.bucket_name_usermedia
   block_public_acls       = true
   block_public_policy     = true
   ignore_public_acls      = true
@@ -39,11 +33,11 @@ resource "aws_s3_bucket_public_access_block" "usermedia" {
 
 //ALBアクセスログ
 resource "aws_s3_bucket" "alb_log" {
-  bucket        = local.bucket_name_alb_log
+  bucket        = module.constants.bucket_name_alb_log
   force_destroy = true
 }
 resource "aws_s3_bucket_policy" "alb_log" {
-  bucket = local.bucket_name_alb_log
+  bucket = module.constants.bucket_name_alb_log
   policy = data.aws_iam_policy_document.alb_log.json
   depends_on = [
     aws_s3_bucket.alb_log
@@ -53,7 +47,7 @@ data "aws_iam_policy_document" "alb_log" {
   statement {
     effect    = "Allow"
     actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::${local.bucket_name_alb_log}/*"]
+    resources = ["arn:aws:s3:::${module.constants.bucket_name_alb_log}/*"]
     principals {
       type = "AWS"
       //ELBアカウントID(ap-northeast-1)
@@ -64,14 +58,14 @@ data "aws_iam_policy_document" "alb_log" {
 
 //secrets保管用
 //resource "aws_s3_bucket" "secrets" {
-//  bucket        = local.bucket_name_secrets
+//  bucket        = module.constants.bucket_name_secrets
 //  force_destroy = true
 //  //versioning {
 //  //  enabled = true
 //  //}
 //}
 //resource "aws_s3_bucket_server_side_encryption_configuration" "secrets" {
-//  bucket = local.bucket_name_secrets
+//  bucket = module.constants.bucket_name_secrets
 //  rule {
 //    apply_server_side_encryption_by_default {
 //      sse_algorithm = "AES256"
@@ -80,7 +74,7 @@ data "aws_iam_policy_document" "alb_log" {
 //  }
 //}
 //resource "aws_s3_bucket_public_access_block" "secrets" {
-//  bucket                  = local.bucket_name_secrets
+//  bucket                  = module.constants.bucket_name_secrets
 //  block_public_acls       = true
 //  block_public_policy     = true
 //  ignore_public_acls      = true
@@ -88,7 +82,7 @@ data "aws_iam_policy_document" "alb_log" {
 //}
 //frontend
 resource "aws_s3_bucket" "frontend" {
-  bucket        = local.bucket_name_frontend
+  bucket        = module.constants.bucket_name_frontend
   force_destroy = true
   //versioning {
   //  enabled = true
