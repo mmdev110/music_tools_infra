@@ -4,16 +4,13 @@ terraform {
     key    = "tf/network/terraform.tfstate"
   }
 }
-locals {
-  service_name = "music-tools"
-  env          = "prod"
-}
+
 provider "aws" {
   region = "ap-northeast-1"
   default_tags {
     tags = {
-      service = local.service_name
-      env     = local.env
+      service = module.constants.service_name
+      env     = module.constants.env
     }
   }
 }
@@ -23,8 +20,8 @@ provider "aws" {
   alias  = "us"
   default_tags {
     tags = {
-      service = local.service_name
-      env     = local.env
+      service = module.constants.service_name
+      env     = module.constants.env
     }
   }
 }

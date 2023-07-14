@@ -81,11 +81,11 @@ resource "aws_ecs_task_definition" "backend" {
         },
         {
           "name" : "BACKEND_URL",
-          "value" : "",
+          "value" : module.constants.backend_domain,
         },
         {
           "name" : "FRONTEND_URL",
-          "value" : "",
+          "value" : module.constants.frontend_domain,
         },
         {
           "name" : "MYSQL_PORT",
@@ -95,17 +95,17 @@ resource "aws_ecs_task_definition" "backend" {
           "name" : "MYSQL_HOST",
           "value" : aws_db_instance.db.address,
         },
-        {
-          "name" : "AWS_ACCESS_KEY_ID",
-          "value" : "",
-        },
-        {
-          "name" : "AWS_SECRET_ACCESS_KEY",
-          "value" : "",
-        },
+        //{
+        //  "name" : "AWS_ACCESS_KEY_ID",
+        //  "value" : "",
+        //},
+        //{
+        //  "name" : "AWS_SECRET_ACCESS_KEY",
+        //  "value" : "",
+        //},
         {
           "name" : "AWS_BUCKET_NAME",
-          "value" : local.bucket_name_usermedia,
+          "value" : module.constants.bucket_name_usermedia,
         },
         {
           "name" : "AWS_MEDIACONVERT_ENDPOINT",
