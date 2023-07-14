@@ -5,7 +5,7 @@ resource "aws_acm_certificate" "cloudfront" {
   provider    = aws.us
   domain_name = aws_route53_zone.example.name
   //ドメイン名を追加したい場合以下に指定(mydomain.comに加えてtest.mydomain.comも追加したいなど)
-  subject_alternative_names = []
+  subject_alternative_names = [local.backend_domain, local.frontend_domain]
   //検証方法
   //DNS検証かEメール検証
   validation_method = "DNS"
