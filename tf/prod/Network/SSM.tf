@@ -38,3 +38,12 @@ resource "aws_ssm_parameter" "db_database" {
     ignore_changes = [value]
   }
 }
+resource "aws_ssm_parameter" "hmac_secret_key" {
+  name        = "/backend/hmac_secret_key"
+  value       = "replace me"
+  type        = "SecureString"
+  description = "hmac_secret_key"
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
