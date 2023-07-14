@@ -25,7 +25,11 @@ resource "aws_ecs_service" "backend" {
   //どこにタスクを配置するか？
   network_configuration {
     assign_public_ip = false
-    security_groups  = [module.nginx_sg.security_group_id, module.https_sg.security_group_id]
+    security_groups = [
+      module.nginx_sg.security_group_id,
+      module.https_sg.security_group_id,
+      module.golang_sg.security_group_id
+    ]
 
     subnets = [
       data.aws_subnet.web0.id,
@@ -70,15 +74,78 @@ resource "aws_ecs_task_definition" "backend" {
           "awslogs-group" : "/ecs/backend"
         }
       },
-      "environmentFiles" : [
+      "environment" : [
+                {
+          "name" : "ENV",
+          "value" : "prod",
+        },
         {
-          "type" : "s3",
-          "value" : "${data.aws_s3_bucket.secrets.arn}/${local.secrets_file_name}",
+          "name" : "BACKEND_URL",
+          "value" : "",
+        },
+        {
+          "name" : "FRONTEND_URL",
+          "value" : "",
+        },
+        {
+          "name" : "MYSQL_PORT",
+          "value" : "3306",
+        },
+        {
+          "name" : "MYSQL_HOST",
+          "value" : aws_db_instance.db.address,
+        },
+        {
+          "name" : "AWS_ACCESS_KEY_ID",
+          "value" : "",
+        },
+        {
+          "name" : "AWS_SECRET_ACCESS_KEY",
+          "value" : "",
+        },
+        {
+          "name" : "AWS_BUCKET_NAME",
+          "value" : local.bucket_name_usermedia,
+        },
+        {
+          "name" : "AWS_MEDIACONVERT_ENDPOINT",
+          "value" : "https://mpazqbhuc.mediaconvert.ap-northeast-1.amazonaws.com",
+        },
+        {
+          "name" : "AWS_CLOUDFRONT_DOMAIN",
+          "value" : "https://d9vtujh5rva21.cloudfront.net",
+        },
+        {
+          "name" : "AWS_REGION",
+          "value" : "ap-northeast-1",
+        },
+      ],
+      "secrets" : [
+        {
+          "name" : "MYSQL_ROOT_PASSWORD",
+          "valueFrom" : "/db/db_password",
+        },
+        {
+          "name" : "MYSQL_DATABASE",
+          "valueFrom" : "/db/db_database",
+        },
+        {
+          "name" : "MYSQL_USER",
+          "valueFrom" : "/db/db_user",
+        },
+        {
+          "name" : "MYSQL_PASSWORD",
+          "valueFrom" : "/db/db_password",
+        },
+        {
+          "name" : "HMAC_SECRET_KEY",
+          "valueFrom" : "/backend/hmac_secret_key",
         },
       ],
       "command" : ["/output"]
     }
   ])
+  depends_on = [aws_db_instance.db]
 } //ECSに付与するIAMロール
 module "ecs_task_execution_role" {
   source     = "../iam_role"
@@ -106,5 +173,12 @@ module "nginx_sg" {
   name        = "nginx-sg"
   vpc_id      = data.aws_vpc.service.id
   port        = 80
+  cidr_blocks = [data.aws_vpc.service.cidr_block]
+}
+module "golang_sg" {
+  source      = "../security_group"
+  name        = "golang-sg"
+  vpc_id      = data.aws_vpc.service.id
+  port        = 5000
   cidr_blocks = [data.aws_vpc.service.cidr_block]
 }
