@@ -19,7 +19,7 @@ resource "aws_acm_certificate" "cloudfront" {
 resource "aws_acm_certificate_validation" "cloudfront" {
   provider                = aws.us
   certificate_arn         = aws_acm_certificate.cloudfront.arn
-  validation_record_fqdns = [aws_route53_record.cloudfront_certificate.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.cloudfront_certificate : record.fqdn]
 }
 
 //ELB用の証明書
@@ -27,7 +27,7 @@ resource "aws_acm_certificate_validation" "cloudfront" {
 resource "aws_acm_certificate" "elb" {
   domain_name = aws_route53_zone.example.name
   //ドメイン名を追加したい場合以下に指定(mydomain.comに加えてtest.mydomain.comも追加したいなど)
-  subject_alternative_names = []
+  subject_alternative_names = [local.backend_domain, local.frontend_domain]
   //検証方法
   //DNS検証かEメール検証
   validation_method = "DNS"
@@ -40,5 +40,5 @@ resource "aws_acm_certificate" "elb" {
 //検証完了まで待機するためのリソース
 resource "aws_acm_certificate_validation" "elb" {
   certificate_arn         = aws_acm_certificate.elb.arn
-  validation_record_fqdns = [aws_route53_record.cloudfront_certificate.fqdn]
+  validation_record_fqdns = [for record in aws_route53_record.cloudfront_certificate : record.fqdn]
 }

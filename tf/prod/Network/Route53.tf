@@ -25,12 +25,19 @@ resource "aws_route53_zone" "example" {
 //検証用のDNSレコード
 //サブドメイン追加してたら、その分も作る
 resource "aws_route53_record" "cloudfront_certificate" {
-  for_each = aws_acm_certificate.cloudfront.domain_validation_options
-  zone_id  = aws_route53_zone.example.id
-  name     = each.value.resource_record_name
-  type     = each.value.resource_record_type
-  records  = [each.value.resource_record_value]
-  ttl      = 60
+  for_each = {
+    for dvo in aws_acm_certificate.cloudfront.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+  allow_overwrite = true
+  name            = each.value.name
+  records         = [each.value.record]
+  ttl             = 60
+  type            = each.value.type
+  zone_id         = aws_route53_zone.example.zone_id
 }
 
 output "domain_name" {
