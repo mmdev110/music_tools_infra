@@ -63,29 +63,29 @@ data "aws_iam_policy_document" "alb_log" {
 }
 
 //secrets保管用
-resource "aws_s3_bucket" "secrets" {
-  bucket        = local.bucket_name_secrets
-  force_destroy = true
-  //versioning {
-  //  enabled = true
-  //}
-}
-resource "aws_s3_bucket_server_side_encryption_configuration" "secrets" {
-  bucket = local.bucket_name_secrets
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-
-    }
-  }
-}
-resource "aws_s3_bucket_public_access_block" "secrets" {
-  bucket                  = local.bucket_name_secrets
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
+//resource "aws_s3_bucket" "secrets" {
+//  bucket        = local.bucket_name_secrets
+//  force_destroy = true
+//  //versioning {
+//  //  enabled = true
+//  //}
+//}
+//resource "aws_s3_bucket_server_side_encryption_configuration" "secrets" {
+//  bucket = local.bucket_name_secrets
+//  rule {
+//    apply_server_side_encryption_by_default {
+//      sse_algorithm = "AES256"
+//
+//    }
+//  }
+//}
+//resource "aws_s3_bucket_public_access_block" "secrets" {
+//  bucket                  = local.bucket_name_secrets
+//  block_public_acls       = true
+//  block_public_policy     = true
+//  ignore_public_acls      = true
+//  restrict_public_buckets = true
+//}
 //frontend
 resource "aws_s3_bucket" "frontend" {
   bucket        = local.bucket_name_frontend
