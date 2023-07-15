@@ -5,7 +5,11 @@ resource "aws_acm_certificate" "cloudfront" {
   provider    = aws.us
   domain_name = aws_route53_zone.example.name
   //ドメイン名を追加したい場合以下に指定(mydomain.comに加えてtest.mydomain.comも追加したいなど)
-  subject_alternative_names = [module.constants.backend_domain, module.constants.frontend_domain]
+  subject_alternative_names = [
+    module.constants.backend_domain,
+    module.constants.backend_elb_domain,
+    module.constants.frontend_domain,
+  ]
   //検証方法
   //DNS検証かEメール検証
   validation_method = "DNS"
@@ -27,7 +31,11 @@ resource "aws_acm_certificate_validation" "cloudfront" {
 resource "aws_acm_certificate" "elb" {
   domain_name = aws_route53_zone.example.name
   //ドメイン名を追加したい場合以下に指定(mydomain.comに加えてtest.mydomain.comも追加したいなど)
-  subject_alternative_names = [module.constants.backend_domain, module.constants.frontend_domain]
+  subject_alternative_names = [
+    module.constants.backend_domain,
+    module.constants.backend_elb_domain,
+    module.constants.frontend_domain,
+  ]
   //検証方法
   //DNS検証かEメール検証
   validation_method = "DNS"

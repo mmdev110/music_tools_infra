@@ -3,59 +3,59 @@
 
 data "aws_vpc" "service" {
   tags = {
-    service = local.service_name
+    service = module.constants.service_name
   }
 }
 data "aws_subnet" "public0" {
   tags = {
-    service = local.service_name
+    service = module.constants.service_name
     Name    = "public0"
   }
 }
 data "aws_subnet" "public1" {
   tags = {
-    service = local.service_name
+    service = module.constants.service_name
     Name    = "public1"
   }
 }
 data "aws_subnet" "web0" {
   tags = {
-    service = local.service_name
+    service = module.constants.service_name
     Name    = "web0"
   }
 }
 data "aws_subnet" "web1" {
   tags = {
-    service = local.service_name
+    service = module.constants.service_name
     Name    = "web1"
   }
 }
 data "aws_subnet" "db0" {
   tags = {
-    service = local.service_name
+    service = module.constants.service_name
     Name    = "db0"
   }
 }
 data "aws_subnet" "db1" {
   tags = {
-    service = local.service_name
+    service = module.constants.service_name
     Name    = "db1"
   }
 }
 data "aws_internet_gateway" "example" {
   tags = {
-    service = local.service_name
+    service = module.constants.service_name
   }
 }
 data "aws_route_table" "private0" {
   tags = {
-    service = local.service_name
+    service = module.constants.service_name
     Name    = "private0"
   }
 }
 data "aws_route_table" "private1" {
   tags = {
-    service = local.service_name
+    service = module.constants.service_name
     Name    = "private1"
   }
 }

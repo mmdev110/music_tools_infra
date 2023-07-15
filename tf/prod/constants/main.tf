@@ -5,6 +5,7 @@ locals {
   main_domain     = "ys-dev.net"
   frontend_domain = "music-tools.ys-dev.net"
   backend_domain  = "backend.music-tools.ys-dev.net"
+  backend_elb_domain  = "elb-backend.music-tools.ys-dev.net"
 
   bucket_name_usermedia = "music-tools-media-prod"
   bucket_name_alb_log   = "music-tools-access-log-prod"
@@ -25,6 +26,9 @@ output "frontend_domain" {
 }
 output "backend_domain" {
   value = local.backend_domain
+}
+output "backend_elb_domain" {
+  value = local.backend_elb_domain
 }
 
 output "bucket_name_usermedia" {

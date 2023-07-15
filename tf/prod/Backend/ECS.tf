@@ -75,7 +75,7 @@ resource "aws_ecs_task_definition" "backend" {
         }
       },
       "environment" : [
-                {
+        {
           "name" : "ENV",
           "value" : "prod",
         },
