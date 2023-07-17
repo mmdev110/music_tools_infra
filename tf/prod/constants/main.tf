@@ -9,7 +9,7 @@ locals {
 
   bucket_name_usermedia = "music-tools-media-prod"
   bucket_name_alb_log   = "music-tools-access-log-prod"
-  bucket_name_frontend  = "music-tools-frontend"
+  bucket_name_frontend  = "music-tools-frontend-prod"
   bucket_name_terraform = "music-tools-infra-prod"
 
   ecr_repository_name_backend="music_tools_backend"
