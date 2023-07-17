@@ -2,7 +2,7 @@ locals {
   secrets_file_name = "app.prod.env"
 }
 data "aws_ecr_repository" "repository" {
-  name = "music_tools_backend"
+  name = module.constants.ecr_repository_name_backend
 }
 
 resource "aws_ecs_cluster" "backend_cluster" {
@@ -58,7 +58,7 @@ resource "aws_ecs_task_definition" "backend" {
   container_definitions = jsonencode([
     {
       "name" : "backend",
-      "image" : "${data.aws_ecr_repository.repository.repository_url}:latest",
+      "image" : "${data.aws_ecr_repository.backend.repository_url}:latest",
       "essential" : true,
       "portMappings" : [
         {
@@ -167,6 +167,11 @@ data "aws_iam_policy_document" "ecs_task_execution" {
     effect    = "Allow"
     actions   = ["ssm:GetParameters", "kms:Decrypt", "s3:GetObject", "s3:GetBucketLocation"]
     resources = ["*"]
+  }
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:GetObject", "s3:PutObject"]
+    resources = ["${data.aws_s3_bucket.usermedia.arn}/*"]
   }
 }
 module "nginx_sg" {
