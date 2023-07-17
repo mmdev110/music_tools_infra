@@ -11,6 +11,12 @@ locals {
   bucket_name_alb_log   = "music-tools-access-log-prod"
   bucket_name_frontend  = "music-tools-frontend"
   bucket_name_terraform = "music-tools-infra-prod"
+
+  ecr_repository_name_backend="music_tools_backend"
+  lambda_function_name="music_tools_lambda_convert_prod"
+
+  mediaconvert_region="ap-northeast-1"
+  mediaconvert_job_template_name="music_tools_convert_prod"
 }
 output "service_name" {
   value = local.service_name
@@ -42,4 +48,16 @@ output "bucket_name_frontend" {
 }
 output "bucket_name_terraform" {
   value = local.bucket_name_terraform
+}
+output "ecr_repository_name_backend" {
+  value = local.ecr_repository_name_backend
+}
+output "lambda_function_name" {
+  value = local.lambda_function_name
+}
+output "mediaconvert_region" {
+  value = local.mediaconvert_region
+}
+output "mediaconvert_job_template_name" {
+  value = local.mediaconvert_job_template_name
 }
