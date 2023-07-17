@@ -2,17 +2,6 @@ variable "name" {}
 variable "policy" {}
 variable "identifier" {}
 
-
-//ポリシードキュメント(json)
-//何を許可、拒否するのか
-data "aws_iam_policy_document" "allow_describe_regions" {
-  statement {
-    effect    = "Allow"
-    actions   = ["ec2:DescribeRegions"]
-    resources = ["*"]
-  }
-
-}
 //ポリシードキュメントからIAMポリシー作成
 resource "aws_iam_policy" "default" {
   name   = var.name
