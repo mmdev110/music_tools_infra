@@ -9,7 +9,7 @@ data "aws_iam_policy_document" "backend" {
   statement {
     effect    = "Allow"
     actions   = ["s3:GetObject", "s3:PutObject"]
-    resources = ["arn:aws:s3:::${module.constants.bucket_name_usermedia}/*"]
+    resources = ["${aws_s3_bucket.usermedia.arn}/*"]
   }
 }
 

@@ -37,7 +37,7 @@ data "aws_iam_policy_document" "lambda" {
     //resources = ["arn:aws:logs:ap-northeast-1:138767642386:log-group:/aws/lambda/music_tools_convert_local:*"]
     resources = ["*"]
   }
-    statement {
+  statement {
     effect  = "Allow"
     actions = ["iam:PassRole"]
     //resources = ["arn:aws:logs:ap-northeast-1:138767642386:log-group:/aws/lambda/music_tools_convert_local:*"]
