@@ -69,7 +69,7 @@ resource "aws_db_instance" "db" {
 
 //DBインスタンスのセキュリティグループ
 module "mysql_sg" {
-  source      = "../security_group"
+  source      = "../../modules/security_group"
   name        = "mysql-sg"
   vpc_id      = data.aws_vpc.service.id
   port        = 3306

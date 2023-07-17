@@ -146,9 +146,10 @@ resource "aws_ecs_task_definition" "backend" {
     }
   ])
   depends_on = [aws_db_instance.db]
-} //ECSに付与するIAMロール
+}
+//ECSに付与するIAMロール
 module "ecs_task_execution_role" {
-  source     = "../iam_role"
+  source     = "../../modules/iam_role"
   name       = "ecs_task_execution"
   identifier = "ecs-tasks.amazonaws.com"
   policy     = data.aws_iam_policy_document.ecs_task_execution.json
@@ -169,14 +170,14 @@ data "aws_iam_policy_document" "ecs_task_execution" {
   }
 }
 module "nginx_sg" {
-  source      = "../security_group"
+  source      = "../../modules/security_group"
   name        = "nginx-sg"
   vpc_id      = data.aws_vpc.service.id
   port        = 80
   cidr_blocks = [data.aws_vpc.service.cidr_block]
 }
 module "golang_sg" {
-  source      = "../security_group"
+  source      = "../../modules/security_group"
   name        = "golang-sg"
   vpc_id      = data.aws_vpc.service.id
   port        = 5000

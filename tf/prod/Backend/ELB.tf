@@ -105,7 +105,7 @@ resource "aws_lb_target_group" "backend" {
 //security group
 module "http_sg" {
   //外部から80ポートへのingressを許可(http)
-  source      = "../security_group"
+  source      = "../../modules/security_group"
   name        = "http-sg"
   vpc_id      = data.aws_vpc.service.id
   port        = 80
@@ -113,7 +113,7 @@ module "http_sg" {
 }
 module "https_sg" {
   //外部から443ポートへのingressを許可(https)
-  source      = "../security_group"
+  source      = "../../modules/security_group"
   name        = "https-sg"
   vpc_id      = data.aws_vpc.service.id
   port        = 443
