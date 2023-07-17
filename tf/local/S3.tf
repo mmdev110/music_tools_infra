@@ -30,3 +30,24 @@ resource "aws_s3_bucket_public_access_block" "usermedia" {
   ignore_public_acls      = true
   restrict_public_buckets = true
 }
+
+resource "aws_s3_bucket_notification" "audio_put" {
+  bucket = aws_s3_bucket.usermedia.id
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.lambda.arn
+    events              = ["s3:ObjectCreated:Put"]
+    filter_suffix       = ".wav"
+  }
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.lambda.arn
+    events              = ["s3:ObjectCreated:Put"]
+    filter_suffix       = ".mp3"
+  }
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.lambda.arn
+    events              = ["s3:ObjectCreated:Put"]
+    filter_suffix       = ".m4a"
+  }
+  depends_on = [aws_lambda_permission.allow_bucket]
+}

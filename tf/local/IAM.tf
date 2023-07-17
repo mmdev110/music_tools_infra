@@ -16,7 +16,7 @@ data "aws_iam_policy_document" "backend" {
 resource "aws_iam_user_policy" "backend" {
   name = "music_tools_backend_policy"
   //path        = "/"
-  user        = aws_iam_user.backend.name
+  user = aws_iam_user.backend.name
   # Terraform's "jsonencode" function converts a
   # Terraform expression result to valid JSON syntax.
   policy = data.aws_iam_policy_document.backend.json
