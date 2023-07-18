@@ -33,6 +33,7 @@ resource "aws_cloudfront_distribution" "backend" {
     allowed_methods  = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
     cached_methods   = ["GET", "HEAD"]
     cache_policy_id  = data.aws_cloudfront_cache_policy.no_cache.id
+    origin_request_policy_id  = data.aws_cloudfront_origin_request_policy.all_viewer.id
     max_ttl          = 0
     min_ttl          = 0
     default_ttl      = 0
@@ -64,4 +65,7 @@ resource "aws_cloudfront_distribution" "backend" {
 
 data "aws_cloudfront_cache_policy" "no_cache" {
   name = "Managed-CachingDisabled"
+}
+data "aws_cloudfront_origin_request_policy" "all_viewer" {
+  name = "Managed-AllViewer"
 }
