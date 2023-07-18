@@ -6,7 +6,7 @@ locals {
 }
 //エンドポイント
 data "aws_ssm_parameter" "mediaconvert_endpoint" {
-  name = "/music-tools/local/backend/mediaconvert_endpoint"
+  name = "/music_tools/local/backend/mediaconvert_endpoint"
 }
 
 //実行時のIAMロール
