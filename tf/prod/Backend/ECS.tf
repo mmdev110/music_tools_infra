@@ -150,7 +150,7 @@ resource "aws_ecs_task_definition" "backend" {
 //ECSに付与するIAMロール
 module "ecs_task_execution_role" {
   source     = "../../modules/iam_role"
-  name       = "ecs_task_execution"
+  name       = "music_tools_ecs_role_prod"
   identifier = "ecs-tasks.amazonaws.com"
   policy     = data.aws_iam_policy_document.ecs_task_execution.json
 }
