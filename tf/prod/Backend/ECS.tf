@@ -81,11 +81,11 @@ resource "aws_ecs_task_definition" "backend" {
         },
         {
           "name" : "BACKEND_URL",
-          "value" : module.constants.backend_domain,
+          "value" : "https://${module.constants.backend_domain}",
         },
         {
           "name" : "FRONTEND_URL",
-          "value" : module.constants.frontend_domain,
+          "value" : "https://${module.constants.frontend_domain}",
         },
         {
           "name" : "MYSQL_PORT",
@@ -123,23 +123,23 @@ resource "aws_ecs_task_definition" "backend" {
       "secrets" : [
         {
           "name" : "MYSQL_ROOT_PASSWORD",
-          "valueFrom" : "/db/db_password",
+          "valueFrom" : "/music_tools/prod/db/db_password",
         },
         {
           "name" : "MYSQL_DATABASE",
-          "valueFrom" : "/db/db_database",
+          "valueFrom" : "/music_tools/prod/db/db_database",
         },
         {
           "name" : "MYSQL_USER",
-          "valueFrom" : "/db/db_user",
+          "valueFrom" : "/music_tools/prod/db/db_user",
         },
         {
           "name" : "MYSQL_PASSWORD",
-          "valueFrom" : "/db/db_password",
+          "valueFrom" : "/music_tools/prod/db/db_password",
         },
         {
           "name" : "HMAC_SECRET_KEY",
-          "valueFrom" : "/backend/hmac_secret_key",
+          "valueFrom" : "/music_tools/prod/backend/hmac_secret_key",
         },
       ],
       "command" : ["/output"]
