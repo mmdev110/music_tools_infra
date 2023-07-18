@@ -11,7 +11,10 @@ resource "aws_lb" "backend" {
   idle_timeout               = 60
   enable_deletion_protection = false
 
-  subnets = [data.aws_subnet.public0.id, data.aws_subnet.public1.id]
+  subnets = [
+    data.aws_subnet.public0.id,
+    data.aws_subnet.public1.id
+  ]
   access_logs {
     bucket  = data.aws_s3_bucket.alb_log.id
     enabled = true
