@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "lambda" {
   function_name = module.constants.lambda_function_name
   role          = module.lambda_role.iam_role_arn
-  image_uri     = "${aws_ecr_repository.lambda.repository_url}@${data.aws_ecr_image.lambda.image_digest}"
+  image_uri     = "${data.aws_ecr_repository.lambda.repository_url}@${data.aws_ecr_image.lambda.image_digest}"
   package_type  = "Image"
   skip_destroy  = false
   memory_size   = 128
@@ -51,7 +51,7 @@ data "aws_iam_policy_document" "lambda" {
 
 
 module "lambda_role" {
-  source     = "../modules/iam_role"
+  source     = "../../modules/iam_role"
   name       = "lambda_role"
   identifier = "lambda.amazonaws.com"
   policy     = data.aws_iam_policy_document.lambda.json

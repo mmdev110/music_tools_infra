@@ -1,7 +1,7 @@
 locals {
   secrets_file_name = "app.prod.env"
 }
-data "aws_ecr_repository" "repository" {
+data "aws_ecr_repository" "backend" {
   name = module.constants.ecr_repository_name_backend
 }
 

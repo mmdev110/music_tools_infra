@@ -1,12 +1,12 @@
 //MediaConvertはterraform未対応
 //エンドポイント
 data "aws_ssm_parameter" "mediaconvert_endpoint" {
-  name = "/music-tools/prod/backend/mediaconvert_endpoint"
+  name = "/music_tools/prod/backend/mediaconvert_endpoint"
 }
 
 //実行時のIAMロール
 module "mediaconvert_role" {
-  source     = "../modules/iam_role"
+  source     = "../../modules/iam_role"
   name       = "mediaconvert_role"
   identifier = "mediaconvert.amazonaws.com"
   policy     = data.aws_iam_policy_document.mediaconvert.json
