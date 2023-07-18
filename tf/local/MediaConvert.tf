@@ -12,7 +12,7 @@ data "aws_ssm_parameter" "mediaconvert_endpoint" {
 //実行時のIAMロール
 module "mediaconvert_role" {
   source     = "../modules/iam_role"
-  name       = "mediaconvert_role"
+  name       = "music_tools_mediaconvert_role_local"
   identifier = "mediaconvert.amazonaws.com"
   policy     = data.aws_iam_policy_document.mediaconvert.json
 }

@@ -48,7 +48,7 @@ data "aws_iam_policy_document" "lambda" {
 
 module "lambda_role" {
   source     = "../modules/iam_role"
-  name       = "lambda_role"
+  name       = "music_tools_lambda_role_local"
   identifier = "lambda.amazonaws.com"
   policy     = data.aws_iam_policy_document.lambda.json
 }
