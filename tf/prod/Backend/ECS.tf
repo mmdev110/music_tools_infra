@@ -53,6 +53,7 @@ resource "aws_ecs_task_definition" "backend" {
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = module.ecs_task_execution_role.iam_role_arn
+  task_role_arn       = module.ecs_backend_role.iam_role_arn
   cpu                      = "256"
   memory                   = "512"
   container_definitions = jsonencode([
@@ -150,9 +151,15 @@ resource "aws_ecs_task_definition" "backend" {
 //ECSに付与するIAMロール
 module "ecs_task_execution_role" {
   source     = "../../modules/iam_role"
-  name       = "music_tools_ecs_role_prod"
+  name       = "music_tools_ecs_execution_role_prod"
   identifier = "ecs-tasks.amazonaws.com"
   policy     = data.aws_iam_policy_document.ecs_task_execution.json
+}
+module "ecs_backend_role" {
+  source     = "../../modules/iam_role"
+  name       = "music_tools_ecs_backend_role_prod"
+  identifier = "ecs-tasks.amazonaws.com"
+  policy     = data.aws_iam_policy_document.ecs_backend.json
 }
 //プリセットがあるのでそれを使用する
 data "aws_iam_policy" "ecs_task_execution_role_policy" {
@@ -165,9 +172,21 @@ data "aws_iam_policy_document" "ecs_task_execution" {
 
   statement {
     effect    = "Allow"
-    actions   = ["ssm:GetParameters", "kms:Decrypt", "s3:GetObject", "s3:GetBucketLocation"]
+    actions   = [
+      "ssm:GetParameters",
+      "kms:Decrypt",
+      //"s3:GetObject",
+      //"s3:GetBucketLocation"
+      ]
     resources = ["*"]
   }
+  statement {
+    effect    = "Allow"
+    actions   = ["s3:GetObject", "s3:PutObject"]
+    resources = ["${data.aws_s3_bucket.usermedia.arn}/*"]
+  }
+}
+data "aws_iam_policy_document" "ecs_backend" {
   statement {
     effect    = "Allow"
     actions   = ["s3:GetObject", "s3:PutObject"]
