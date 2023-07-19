@@ -88,3 +88,12 @@ resource "aws_s3_bucket" "frontend" {
   //  enabled = true
   //}
 }
+resource "aws_s3_bucket_cors_configuration" "frontend" {
+  bucket = module.constants.bucket_name_frontend
+  cors_rule {
+    allowed_origins = ["*"]
+    allowed_methods = ["GET"]
+    allowed_headers = ["*"]
+    max_age_seconds = 3000
+  }
+}
