@@ -12,6 +12,8 @@ locals {
   bucket_name_frontend  = "music-tools-frontend-prod"
   bucket_name_terraform = "music-tools-infra-prod"
 
+  cloudwatch_backend_log="/music_tools/prod/backend"
+
   ecr_repository_name_backend="music_tools_backend"
   lambda_function_name="music_tools_lambda_convert_prod"
 
@@ -35,6 +37,9 @@ output "backend_domain" {
 }
 output "backend_elb_domain" {
   value = local.backend_elb_domain
+}
+output "cloudwatch_backend_log" {
+  value = local.cloudwatch_backend_log
 }
 
 output "bucket_name_usermedia" {

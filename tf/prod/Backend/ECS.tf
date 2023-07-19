@@ -71,8 +71,8 @@ resource "aws_ecs_task_definition" "backend" {
         "logDriver" : "awslogs",
         "options" : {
           "awslogs-region" : "ap-northeast-1",
-          "awslogs-stream-prefix" : "nginx",
-          "awslogs-group" : "/ecs/backend"
+          "awslogs-stream-prefix" : "backend",
+          "awslogs-group" : module.constants.cloudwatch_backend_log
         }
       },
       "environment" : [
