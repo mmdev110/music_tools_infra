@@ -53,7 +53,7 @@ resource "aws_ecs_task_definition" "backend" {
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = module.ecs_task_execution_role.iam_role_arn
-  task_role_arn       = module.ecs_backend_role.iam_role_arn
+  task_role_arn            = module.ecs_backend_role.iam_role_arn
   cpu                      = "256"
   memory                   = "512"
   container_definitions = jsonencode([
@@ -171,13 +171,13 @@ data "aws_iam_policy_document" "ecs_task_execution" {
   source_policy_documents = [data.aws_iam_policy.ecs_task_execution_role_policy.policy]
 
   statement {
-    effect    = "Allow"
-    actions   = [
+    effect = "Allow"
+    actions = [
       "ssm:GetParameters",
       "kms:Decrypt",
       //"s3:GetObject",
       //"s3:GetBucketLocation"
-      ]
+    ]
     resources = ["*"]
   }
   statement {

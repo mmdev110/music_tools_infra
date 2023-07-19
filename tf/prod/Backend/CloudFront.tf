@@ -29,15 +29,15 @@ resource "aws_cloudfront_distribution" "backend" {
   aliases = [module.constants.backend_domain]
 
   default_cache_behavior {
-    compress         = false
-    allowed_methods  = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
-    cached_methods   = ["GET", "HEAD"]
-    cache_policy_id  = data.aws_cloudfront_cache_policy.no_cache.id
-    origin_request_policy_id  = data.aws_cloudfront_origin_request_policy.all_viewer.id
-    max_ttl          = 0
-    min_ttl          = 0
-    default_ttl      = 0
-    target_origin_id = local.origin_id
+    compress                 = false
+    allowed_methods          = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
+    cached_methods           = ["GET", "HEAD"]
+    cache_policy_id          = data.aws_cloudfront_cache_policy.no_cache.id
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
+    max_ttl                  = 0
+    min_ttl                  = 0
+    default_ttl              = 0
+    target_origin_id         = local.origin_id
 
     viewer_protocol_policy = "redirect-to-https"
   }
