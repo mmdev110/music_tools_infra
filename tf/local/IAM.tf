@@ -11,6 +11,11 @@ data "aws_iam_policy_document" "backend" {
     actions   = ["s3:GetObject", "s3:PutObject"]
     resources = ["${aws_s3_bucket.usermedia.arn}/*"]
   }
+  statement {
+    effect    = "Allow"
+    actions   = ["ses:SendEmail"]
+    resources = ["*"]
+  }
 }
 
 resource "aws_iam_user_policy" "backend" {

@@ -1,7 +1,7 @@
 locals {
   service_name = "music_tools"
   env          = "local"
-
+  email_domain ="ys-dev.net"
   frontend_domain = "localhost:3000"
   backend_domain  = "localhost:5000"
 
@@ -15,6 +15,9 @@ output "service_name" {
 }
 output "env" {
   value = local.env
+}
+output "email_domain" {
+  value = local.email_domain
 }
 output "frontend_domain" {
   value = local.frontend_domain
