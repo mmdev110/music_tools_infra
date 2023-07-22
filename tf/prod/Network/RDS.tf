@@ -35,7 +35,7 @@ locals {
 //スナップショットから復元したい場合は
 //aws_db_instance.db.snapshot_identifierとdata.aws_db_snapshot.recentのコメントを外す
 resource "aws_db_instance" "db" {
-  identifier = local.db_identifier
+  identifier            = local.db_identifier
   snapshot_identifier   = data.aws_db_snapshot.recent.id
   engine                = "mysql"
   engine_version        = "8.0.33"
@@ -43,6 +43,7 @@ resource "aws_db_instance" "db" {
   username              = aws_ssm_parameter.db_user.value
   password              = aws_ssm_parameter.db_password.value
   db_name               = aws_ssm_parameter.db_database.value
+  availability_zone     = "ap-northeast-1a"
   storage_type          = "gp3"
   storage_encrypted     = true
   allocated_storage     = 20
