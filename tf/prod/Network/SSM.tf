@@ -61,6 +61,12 @@ resource "aws_ssm_parameter" "hmac_secret_key" {
     ignore_changes = [value]
   }
 }
+resource "aws_ssm_parameter" "db_host" {
+  name        = "/music_tools/prod/db/db_host"
+  value       = aws_db_instance.db.address
+  type        = "SecureString"
+  description = "db host"
+}
 
 resource "aws_ssm_parameter" "mediaconvert_endpoint" {
   name        = "/music_tools/prod/backend/mediaconvert_endpoint"

@@ -92,10 +92,6 @@ resource "aws_ecs_task_definition" "backend" {
           "name" : "MYSQL_PORT",
           "value" : "3306",
         },
-        {
-          "name" : "MYSQL_HOST",
-          "value" : aws_db_instance.db.address,
-        },
         //{
         //  "name" : "AWS_ACCESS_KEY_ID",
         //  "value" : "",
@@ -142,11 +138,15 @@ resource "aws_ecs_task_definition" "backend" {
           "name" : "HMAC_SECRET_KEY",
           "valueFrom" : "/music_tools/prod/backend/hmac_secret_key",
         },
+        {
+          "name" : "MYSQL_HOST",
+          "valueFrom" : "/music_tools/prod/db/db_host",
+        },
       ],
       "command" : ["/output"]
     }
   ])
-  depends_on = [aws_db_instance.db]
+  //depends_on = [aws_db_instance.db]
 }
 //ECSに付与するIAMロール
 module "ecs_task_execution_role" {
