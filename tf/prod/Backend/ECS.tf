@@ -116,7 +116,7 @@ resource "aws_ecs_task_definition" "backend" {
           "name" : "AWS_REGION",
           "value" : "ap-northeast-1",
         },
-                {
+        {
           "name" : "SUPPORT_EMAIL_DOMAIN",
           "value" : "music-tools.ys-dev.net",
         },
@@ -196,7 +196,7 @@ data "aws_iam_policy_document" "ecs_backend" {
     actions   = ["s3:GetObject", "s3:PutObject"]
     resources = ["${data.aws_s3_bucket.usermedia.arn}/*"]
   }
-    statement {
+  statement {
     effect    = "Allow"
     actions   = ["ses:SendEmail"]
     resources = ["*"]
