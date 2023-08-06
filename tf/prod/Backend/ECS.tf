@@ -26,7 +26,7 @@ resource "aws_ecs_service" "backend" {
   network_configuration {
     assign_public_ip = false
     security_groups = [
-      module.nginx_sg.security_group_id,
+      module.http_sg.security_group_id,
       module.https_sg.security_group_id,
       module.golang_sg.security_group_id
     ]
@@ -150,7 +150,7 @@ resource "aws_ecs_task_definition" "backend" {
       "command" : ["/output"]
     }
   ])
-  //depends_on = [aws_db_instance.db]
+  depends_on = [aws_instance.nat]
 }
 //ECSに付与するIAMロール
 module "ecs_task_execution_role" {
@@ -201,18 +201,4 @@ data "aws_iam_policy_document" "ecs_backend" {
     actions   = ["ses:SendEmail"]
     resources = ["*"]
   }
-}
-module "nginx_sg" {
-  source      = "../../modules/security_group"
-  name        = "nginx-sg"
-  vpc_id      = data.aws_vpc.service.id
-  port        = 80
-  cidr_blocks = [data.aws_vpc.service.cidr_block]
-}
-module "golang_sg" {
-  source      = "../../modules/security_group"
-  name        = "golang-sg"
-  vpc_id      = data.aws_vpc.service.id
-  port        = 5000
-  cidr_blocks = [data.aws_vpc.service.cidr_block]
 }

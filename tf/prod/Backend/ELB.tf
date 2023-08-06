@@ -20,8 +20,8 @@ resource "aws_lb" "backend" {
     enabled = true
   }
   security_groups = [
-    module.http_sg.security_group_id,
-    module.https_sg.security_group_id
+    module.http_sg_public.security_group_id,
+    module.https_sg_public.security_group_id
   ]
 }
 //listener
@@ -105,23 +105,7 @@ resource "aws_lb_target_group" "backend" {
   }
   depends_on = [aws_lb.backend]
 }
-//security group
-module "http_sg" {
-  //外部から80ポートへのingressを許可(http)
-  source      = "../../modules/security_group"
-  name        = "http-sg"
-  vpc_id      = data.aws_vpc.service.id
-  port        = 80
-  cidr_blocks = ["0.0.0.0/0"]
-}
-module "https_sg" {
-  //外部から443ポートへのingressを許可(https)
-  source      = "../../modules/security_group"
-  name        = "https-sg"
-  vpc_id      = data.aws_vpc.service.id
-  port        = 443
-  cidr_blocks = ["0.0.0.0/0"]
-}
+
 
 output "alb_dns_name" {
   value = aws_lb.backend.dns_name

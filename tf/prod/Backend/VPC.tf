@@ -60,26 +60,29 @@ data "aws_route_table" "private1" {
   }
 }
 //NATゲートウェイ
-resource "aws_nat_gateway" "nat_gateway0" {
-  allocation_id = aws_eip.nat_gateway0.id
-  subnet_id     = data.aws_subnet.public0.id
-  //depends_on    = [aws_internet_gateway.example]
-}
+//コスト高すぎるのでNATインスタンス(aws_instance.nat)に変更
+//resource "aws_nat_gateway" "nat_gateway0" {
+//  allocation_id = aws_eip.nat_gateway0.id
+//  subnet_id     = data.aws_subnet.public0.id
+//  //depends_on    = [aws_internet_gateway.example]
+//}
 resource "aws_route" "private0" {
   //外部アクセスをNATゲートウェイに飛ばす
-  route_table_id         = data.aws_route_table.private0.id
-  nat_gateway_id         = aws_nat_gateway.nat_gateway0.id
+  route_table_id = data.aws_route_table.private0.id
+  //nat_gateway_id         = aws_nat_gateway.nat_gateway0.id
+  network_interface_id   = aws_instance.nat.primary_network_interface_id
   destination_cidr_block = "0.0.0.0/0"
 }
 //NATゲートウェイにアタッチするEIP
-resource "aws_eip" "nat_gateway0" {
-  domain = "vpc"
-  //depends_on = [aws_internet_gateway.example]
-}
+//resource "aws_eip" "nat_gateway0" {
+//  domain = "vpc"
+//  //depends_on = [aws_internet_gateway.example]
+//}
 resource "aws_route" "private1" {
   //外部アクセスをNATゲートウェイに飛ばす
   //NATゲートウェイは1a側のを使いシングル構成とする(コスト都合)
-  route_table_id         = data.aws_route_table.private1.id
-  nat_gateway_id         = aws_nat_gateway.nat_gateway0.id
+  route_table_id = data.aws_route_table.private1.id
+  //nat_gateway_id         = aws_nat_gateway.nat_gateway0.id
+  network_interface_id   = aws_instance.nat.primary_network_interface_id
   destination_cidr_block = "0.0.0.0/0"
 }
