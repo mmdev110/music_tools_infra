@@ -1,4 +1,4 @@
 resource "aws_ecr_repository" "repository" {
-  name         = "music_tools_backend"
+  name         = module.constants.ecr_repository_name
   force_delete = true
 }

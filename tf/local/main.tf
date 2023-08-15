@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket = "music-tools-infra-prod"
-    key    = "tf/backend/terraform.tfstate"
+    key    = "tf/local/backend/terraform.tfstate"
   }
 }
 provider "aws" {
@@ -25,5 +25,5 @@ provider "aws" {
   }
 }
 module "constants" {
-  source = "../constants"
+  source = "./constants"
 }
