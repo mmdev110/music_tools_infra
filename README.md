@@ -2,4 +2,4 @@
 
 infra diagram test
 
-![](./test_infra.svg)
+![](./music_tools_diagram.svg)
