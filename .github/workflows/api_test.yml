@@ -2,6 +2,7 @@ name: api call test
 
 on:
   repository_dispatch:
+    types: [test_api]
   workflow_dispatch:
 permissions:
   id-token: write
@@ -18,3 +19,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: plan for network
         run: echo hi
+      - name: read parameter from request
+        env:
+          MESSAGE: ${{ github.event.client_payload.message }}
+        run: echo $MESSAGE
