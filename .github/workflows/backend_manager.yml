@@ -1,0 +1,58 @@
+name: backend_manager
+
+on:
+  repository_dispatch:
+    types: [backend_manager]
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./tf/prod/Backend
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          role-to-assume: ${{secrets.AWS_ROLE_ARN}}
+          aws-region: ap-northeast-1
+      - name: Configure Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.6
+      - name: version check
+        run: |
+          aws --version
+          terraform --version
+      - name: branch check
+        if: github.ref!='refs/heads/main'
+        run: |
+          echo "terraform apply runs on main branch only !"
+          exit 1
+      - name: apply
+        if: github.event.client_payload.action=='apply'
+        run: terraform apply -auto-approve
+      - name: destroy
+        if: github.event.client_payload.action=='destroy'
+        run: terraform destroy -auto-approve
+  rds:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        role-to-assume: ${{secrets.AWS_ROLE_ARN}}
+        aws-region: ap-northeast-1
+    - name: start instance
+      if: github.event.client_payload.action=='apply'
+      run: aws rds start-db-instance --db-instance-identifier music-tools-prod-db
+    - name: stop instance
+      if: github.event.client_payload.action=='destroy'
+      run: aws rds stop-db-instance --db-instance-identifier music-tools-prod-db
+
