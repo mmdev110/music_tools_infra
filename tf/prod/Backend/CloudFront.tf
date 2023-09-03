@@ -49,7 +49,7 @@ resource "aws_cloudfront_distribution" "backend" {
       locations        = []
     }
   }
-  retain_on_delete = false
+  retain_on_delete = true
 
   tags = {
     Name = "music_tools_backend"
