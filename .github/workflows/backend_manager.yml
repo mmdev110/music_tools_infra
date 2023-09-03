@@ -34,7 +34,9 @@ jobs:
         if: github.ref!='refs/heads/main'
         run: |
           echo "terraform apply runs on main branch only !"
-          exit 1
+          exit 1      
+      - name: terraform init
+        run: terraform init
       - name: apply
         if: github.event.client_payload.action=='apply'
         run: terraform apply -auto-approve
