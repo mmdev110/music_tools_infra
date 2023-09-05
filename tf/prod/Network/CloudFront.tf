@@ -56,7 +56,7 @@ resource "aws_cloudfront_distribution" "backend" {
   }
 
   viewer_certificate {
-    acm_certificate_arn            = data.aws_acm_certificate.cloudfront.arn
+    acm_certificate_arn            = aws_acm_certificate.cloudfront.arn
     cloudfront_default_certificate = false
     minimum_protocol_version       = "TLSv1.2_2021"
     ssl_support_method             = "sni-only"
@@ -68,4 +68,17 @@ data "aws_cloudfront_cache_policy" "no_cache" {
 }
 data "aws_cloudfront_origin_request_policy" "all_viewer" {
   name = "Managed-AllViewer"
+}
+
+resource "aws_route53_record" "cloudfront" {
+  allow_overwrite = true
+  name            = module.constants.backend_domain
+  //ttl             = 0
+  type    = "A"
+  zone_id = aws_route53_zone.example.zone_id
+  alias {
+    evaluate_target_health = false
+    name                   = aws_cloudfront_distribution.backend.domain_name
+    zone_id                = aws_cloudfront_distribution.backend.hosted_zone_id
+  }
 }

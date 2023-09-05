@@ -19,14 +19,14 @@ locals {
 
   //lambda(media_convert)
   bucket_name_usermedia = "music-tools-media-prod"
-  lambda_name_mediaconvert="music_tools_lambda_convert_prod"
+  lambda_name_mediaconvert="music_tools_convert_prod"
   mediaconvert_region="ap-northeast-1"
   mediaconvert_job_template_name="music_tools_convert_prod"
 
   //lambda(backend_manager)
   backend_manager_domain  = "manager-backend.music-tools.ys-dev.net"
-  lambda_name_manager="music_tools_lambda_convert_prod"
-  ecr_repository_name_backend_manager="music_tools_backend_manager"
+  lambda_name_manager="music_tools_backend_manager_prod"
+  ecr_repository_name_backend_manager="music_tools_backend_manager_prod"
 }
 //全般
 output "service_name" {
