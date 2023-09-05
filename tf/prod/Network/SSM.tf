@@ -12,17 +12,17 @@ resource "aws_ssm_parameter" "backend_ecr_repository_url" {
   description = "URL of ECR repository for backend"
 }
 //lambdaイメージアップロード用
-resource "aws_ssm_parameter" "lambda_ecr_registry_url" {
-  name        = "/music_tools/prod/backend/lambda_ecr_registry_url"
-  value       = split("/", aws_ecr_repository.lambda.repository_url)[0]
+resource "aws_ssm_parameter" "lambda_mediaconvert_ecr_registry_url" {
+  name        = "/music_tools/prod/backend/lambda_mediaconvert_ecr_registry_url"
+  value       = split("/", aws_ecr_repository.lambda_mediaconvert.repository_url)[0]
   type        = "String"
-  description = "URL of ECR registry for lambda"
+  description = "URL of ECR registry for lambda mediaconvert"
 }
-resource "aws_ssm_parameter" "lambda_ecr_repository_url" {
-  name        = "/music_tools/prod/backend/lambda_ecr_repository_url"
-  value       = aws_ecr_repository.lambda.repository_url
+resource "aws_ssm_parameter" "lambda_mediaconvert_ecr_repository_url" {
+  name        = "/music_tools/prod/backend/lambda_mediaconvert_ecr_repository_url"
+  value       = aws_ecr_repository.lambda_mediaconvert.repository_url
   type        = "String"
-  description = "URL of ECR repository for lambda"
+  description = "URL of ECR repository for lambda mediaconvert"
 }
 //db parameters
 resource "aws_ssm_parameter" "db_user" {
@@ -73,6 +73,15 @@ resource "aws_ssm_parameter" "mediaconvert_endpoint" {
   value       = "replace me"
   type        = "SecureString"
   description = "mediaconvert_endpoint for prod"
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+resource "aws_ssm_parameter" "backend_manager_token" {
+  name        = "/music_tools/prod/backend/manager_github_token"
+  value       = "replace me"
+  type        = "SecureString"
+  description = "github_token for backend_manager"
   lifecycle {
     ignore_changes = [value]
   }

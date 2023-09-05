@@ -7,7 +7,6 @@ resource "aws_acm_certificate" "cloudfront" {
   //ドメイン名を追加したい場合以下に指定(mydomain.comに加えてtest.mydomain.comも追加したいなど)
   subject_alternative_names = [
     module.constants.backend_domain,
-    module.constants.backend_elb_domain,
     module.constants.frontend_domain,
   ]
   //検証方法
@@ -28,13 +27,14 @@ resource "aws_acm_certificate_validation" "cloudfront" {
 
 //ELB用の証明書
 //ELBと同じregionで作る必要あり
-resource "aws_acm_certificate" "elb" {
+resource "aws_acm_certificate" "backend" {
   domain_name = aws_route53_zone.example.name
   //ドメイン名を追加したい場合以下に指定(mydomain.comに加えてtest.mydomain.comも追加したいなど)
   subject_alternative_names = [
-    module.constants.backend_domain,
+    //module.constants.backend_domain,
     module.constants.backend_elb_domain,
-    module.constants.frontend_domain,
+    module.constants.backend_manager_domain,
+    //module.constants.frontend_domain,
   ]
   //検証方法
   //DNS検証かEメール検証
@@ -46,7 +46,7 @@ resource "aws_acm_certificate" "elb" {
 }
 
 //検証完了まで待機するためのリソース
-resource "aws_acm_certificate_validation" "elb" {
-  certificate_arn         = aws_acm_certificate.elb.arn
-  validation_record_fqdns = [for record in aws_route53_record.cloudfront_certificate : record.fqdn]
+resource "aws_acm_certificate_validation" "backend" {
+  certificate_arn         = aws_acm_certificate.backend.arn
+  validation_record_fqdns = [for record in aws_route53_record.backend_certificate : record.fqdn]
 }
