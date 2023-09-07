@@ -3,6 +3,7 @@ locals {
   origin_id = "backend_elb"
 }
 resource "aws_cloudfront_distribution" "backend" {
+  //backend
   origin {
     domain_name         = module.constants.backend_elb_domain
     origin_id           = local.origin_id
@@ -15,10 +16,23 @@ resource "aws_cloudfront_distribution" "backend" {
       origin_ssl_protocols   = ["TLSv1.2"]
     }
   }
+  //backend_manager
+  origin {
+    domain_name         = module.constants.backend_manager_domain
+    origin_id           = module.constants.lambda_name_manager
+    connection_attempts = 3
+    connection_timeout  = 10
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
 
   enabled         = true
   is_ipv6_enabled = false
-  comment         = "distribution for music_tools_backend"
+  comment         = "distribution for music_tools_backend prod"
 
   //logging_config {
   //  include_cookies = false
@@ -40,6 +54,19 @@ resource "aws_cloudfront_distribution" "backend" {
     target_origin_id         = local.origin_id
 
     viewer_protocol_policy = "redirect-to-https"
+  }
+
+  ordered_cache_behavior {
+    path_pattern             = "/backend_manager"
+    allowed_methods          = ["HEAD", "DELETE", "POST", "GET", "OPTIONS", "PUT", "PATCH"]
+    cached_methods           = ["GET", "HEAD"]
+    target_origin_id         = module.constants.lambda_name_manager
+    cache_policy_id          = data.aws_cloudfront_cache_policy.no_cache.id
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer_except_host.id
+    max_ttl                  = 0
+    min_ttl                  = 0
+    default_ttl              = 0
+    viewer_protocol_policy   = "redirect-to-https"
   }
   price_class = "PriceClass_All"
 
@@ -68,6 +95,9 @@ data "aws_cloudfront_cache_policy" "no_cache" {
 }
 data "aws_cloudfront_origin_request_policy" "all_viewer" {
   name = "Managed-AllViewer"
+}
+data "aws_cloudfront_origin_request_policy" "all_viewer_except_host" {
+  name = "Managed-AllViewerExceptHostHeader"
 }
 
 resource "aws_route53_record" "cloudfront" {
