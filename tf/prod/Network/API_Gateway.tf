@@ -14,6 +14,12 @@ resource "aws_apigatewayv2_domain_name" "backend_manager" {
 resource "aws_apigatewayv2_api" "backend_manager" {
   name          = module.constants.lambda_name_manager
   protocol_type = "HTTP"
+  cors_configuration {
+    allow_credentials = true
+    allow_headers     = ["accept", "content-type", "x-csrf-token"]
+    allow_methods     = ["GET", "OPTIONS", "POST"]
+    allow_origins     = ["https://${module.constants.frontend_domain}"]
+  }
 }
 
 resource "aws_apigatewayv2_integration" "backend_manager" {
