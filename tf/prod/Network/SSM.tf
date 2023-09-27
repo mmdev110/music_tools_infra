@@ -86,3 +86,46 @@ resource "aws_ssm_parameter" "backend_manager_token" {
     ignore_changes = [value]
   }
 }
+
+resource "aws_ssm_parameter" "google_oauth_client_id" {
+  name        = "/music_tools/prod/frontend/google_oauth_client_id"
+  value       = "replace me"
+  type        = "SecureString"
+  description = "google_oauth_client_id for prod environment"
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+resource "aws_ssm_parameter" "google_oauth_client_secret" {
+  name        = "/music_tools/prod/frontend/google_oauth_client_secret"
+  value       = "replace me"
+  type        = "SecureString"
+  description = "google_oauth_client_secret for prod environment"
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+resource "aws_ssm_parameter" "cognito_user_pool_id" {
+  name        = "/music_tools/prod/frontend/cognito_user_pool_id"
+  value       = aws_cognito_user_pool.auth.id
+  type        = "SecureString"
+  description = "cognito_user_pool_id for prod environment"
+  //lifecycle {
+  //  ignore_changes = [value]
+  //}
+}
+resource "aws_ssm_parameter" "cognito_user_pool_app_client_id" {
+  name        = "/music_tools/prod/frontend/cognito_user_pool_app_client_id"
+  value       = aws_cognito_user_pool_client.client.id
+  type        = "SecureString"
+  description = "cognito_user_pool_app_client_id for prod environment"
+  //lifecycle {
+  //  ignore_changes = [value]
+  //}
+}
+resource "aws_ssm_parameter" "cognito_domain" {
+  name        = "/music_tools/prod/frontend/cognito_domain"
+  value       = "${aws_cognito_user_pool_domain.auth.domain}.auth.ap-northeast-1.amazoncognito.com"
+  type        = "String"
+  description = "cognito_domain for prod environment"
+}
