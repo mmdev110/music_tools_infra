@@ -5,10 +5,14 @@ locals {
   frontend_domain = "localhost:3000"
   backend_domain  = "localhost:5000"
 
+  support_email_address="support@music-tools.ys-dev.net"
+
   bucket_name_usermedia = "music-tools-media-local"
 
   lambda_function_name="music_tools_convert_local"
   ecr_repository_name="music_tools_convert_lambda_local"
+
+  cognito_user_pool_name="music-tools-local"
 }
 output "service_name" {
   value = local.service_name
@@ -33,4 +37,11 @@ output "lambda_function_name" {
 }
 output "ecr_repository_name" {
   value = local.ecr_repository_name
+}
+output "cognito_user_pool_name"{
+  value = local.cognito_user_pool_name
+}
+
+output "support_email_address"{
+  value = local.support_email_address
 }
