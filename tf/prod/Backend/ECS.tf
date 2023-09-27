@@ -146,6 +146,14 @@ resource "aws_ecs_task_definition" "backend" {
           "name" : "MYSQL_HOST",
           "valueFrom" : "/music_tools/prod/db/db_host",
         },
+        {
+          "name" : "AWS_COGNITO_USER_POOL_ID",
+          "valueFrom" : "/music_tools/prod/frontend/cognito_user_pool_id",
+        },
+        {
+          "name" : "AWS_COGNITO_APP_CLIENT_ID",
+          "valueFrom" : "/music_tools/prod/frontend/cognito_user_pool_app_client_id",
+        },
       ],
       "command" : ["/output"]
     }

@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "lambda_backend_manager" {
   function_name = module.constants.lambda_name_manager
   role          = module.lambda_backend_manager_role.iam_role_arn
-  image_uri     = "${aws_ecr_repository.lambda_backend_manager.repository_url}@${data.aws_ecr_image.lambda_backend_manager.image_digest}"
+  image_uri     = "${aws_ecr_repository.lambda_backend_manager.repository_url}:latest"
   package_type  = "Image"
   skip_destroy  = false
   memory_size   = 128
